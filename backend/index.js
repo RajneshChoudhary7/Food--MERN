@@ -16,7 +16,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use("/api/auth",authRouter)
 
-app.use('/',(req,res)=>{
+app.get('/',(req,res)=>{
     res.send("server is running ")
 })
 

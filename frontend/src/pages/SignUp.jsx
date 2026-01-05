@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
-import { FaEye } from "react-icons/fa";
+import { FaAws, FaEye } from "react-icons/fa";
 import { FaRegEyeSlash   } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
+import { serverUrl } from '../App';
+
 
 const SignUp = () => {
     const primaryColor = "#ff4d2d";
@@ -19,6 +22,18 @@ const SignUp = () => {
     const [mobile , setMoblie] = useState("")
 
 
+    const handleSignUp = async()=>{
+        try {
+            const result = await axios.post(`${serverUrl}/api/auth/signup`,{
+                fullName,email,password,mobile,role
+            },{withCredentials:true})
+            console.log(result)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
   return (
       <div className="min-h-screen w-full flex items-center justify-center" style={{backgroundColor:bgColor}}>
             <div className={`bg-white rounded-xl shadow-lg w-full max-w-md p-8 `} style={{border:`1px solid ${borderColor}`}} >
@@ -27,26 +42,38 @@ const SignUp = () => {
                     {/* fullname */}
                 <div className="mb-4">
                     <label htmlFor="fullName" className="block text-gray-700 font-medium mb-1" >Full Name</label>
-                    <input type="text" className='w-full rounded-xl px-3 py-2 focus:outline-none focus:border-orange-500' placeholder='Enter your full name' />
+                    <input type="text" className='w-full rounded-xl px-3 py-2 focus:outline-none focus:border-orange-500' 
+                    onChange={(e)=>setFullName(e.target.value)}
+                    value={fullName}
+                    placeholder='Enter your full name' />
                 </div>
 
                 {/* email */}
                 <div className="mb-4">
                     <label htmlFor="email" className="block text-gray-700 font-medium mb-1" >Email</label>
-                    <input type="email" className='w-full rounded-xl px-3 py-2 focus:outline-none focus:border-orange-500' placeholder='Enter your email' />
+                    <input type="email" className='w-full rounded-xl px-3 py-2 focus:outline-none focus:border-orange-500' 
+                    onChange={(e)=>setemail(e.target.value)}
+                    value={email}
+                    placeholder='Enter your email' />
                 </div>
 
                 {/* moblie */}
                 <div className="mb-4">
                     <label htmlFor="mobile" className="block text-gray-700 font-medium mb-1" >Mobile</label>
-                    <input type="text" className='w-full rounded-xl px-3 py-2 focus:outline-none focus:border-orange-500' placeholder='Enter your mobile' />
+                    <input type="text" className='w-full rounded-xl px-3 py-2 focus:outline-none focus:border-orange-500' 
+                    onChange={(e)=>setMoblie(e.target.value)}
+                    value={mobile}
+                    placeholder='Enter your mobile' />
                 </div>
 
-                {/* fullname */}
+                {/* password */}
                 <div className="mb-4">
                     <label htmlFor="password" className="block text-gray-700 font-medium mb-1" >Password</label>
                         <div className='relative'>
-                    <input type={`${showPassword?"text":"password"}`} className='w-full rounded-xl px-3 py-2 focus:outline-none cursor-pointer focus:border-orange-500' placeholder='Enter your Password' />
+                    <input type={`${showPassword?"text":"password"}`} className='w-full rounded-xl px-3 py-2 focus:outline-none cursor-pointer focus:border-orange-500' 
+                    onChange={(e)=>setpassword(e.target.value)}
+                    value={password}
+                    placeholder='Enter your Password' />
                             <button onClick={()=>setShowPassword(prev=>!prev)} className=' absolute right-3 top-[14px] text-gray-500'>{!showPassword?<FaEye />:<FaRegEyeSlash />}</button>
                         </div>
                         
@@ -78,7 +105,9 @@ const SignUp = () => {
                         
                 </div>
 
-                <button className='w-full font-semibold py-2 rounded-lg transition duration-200 hover:bg-[#e64323] cursor-pointer ' style={{border:"1px solid black"}}>Submit</button>
+                <button 
+                onClick={handleSignUp}
+                className='w-full font-semibold py-2 rounded-lg transition duration-200 hover:bg-[#e64323] cursor-pointer ' style={{border:"1px solid black"}}>Submit</button>
                 <button className='mt-2 w-full flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition duration-200 hover:bg-[#e64323] cursor-pointer ' style={{color:"white"}}><FcGoogle size={20} /><span className='text-black text-center'>Sign up with Google</span></button>
                 <p className='text-center mt-2 cursor-pointer ' onClick={()=>{navigate('/signin')}}>Already have an account ?<span className='text-[#ff4d2d] '>Sign In</span></p>
             </div>
